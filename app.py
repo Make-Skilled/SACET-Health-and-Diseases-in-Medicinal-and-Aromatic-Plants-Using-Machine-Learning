@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify, redirect, url_for, flash, session
+from flask import Flask, request, render_template, jsonify, redirect, send_from_directory, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from keras.models import load_model
 import numpy as np
@@ -63,6 +63,7 @@ def init_db():
             class_name TEXT NOT NULL,
             confidence_score REAL NOT NULL,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            image TEXT NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
         """)
@@ -73,6 +74,10 @@ def init_db():
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 # Sign-up page
 @app.route('/signup', methods=['GET', 'POST'])
@@ -172,8 +177,8 @@ def dashboard():
                 # Store scan result in database
                 with get_db() as conn:
                     cursor = conn.cursor()
-                    cursor.execute("""INSERT INTO scan_history (user_id, class_name, confidence_score) 
-                                      VALUES (?, ?, ?)""", (session['user_id'], class_name, confidence_score))
+                    cursor.execute("""INSERT INTO scan_history (user_id, class_name, confidence_score,image) 
+                                      VALUES (?, ?, ?,?)""", (session['user_id'], class_name, confidence_score,f'{filename}'))
                     conn.commit()
 
                 # Retrieve plant information
@@ -204,7 +209,7 @@ def history():
     with get_db() as conn:
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT class_name, confidence_score, timestamp 
+            SELECT class_name, confidence_score, timestamp ,image
             FROM scan_history 
             WHERE user_id = ? 
             ORDER BY timestamp DESC

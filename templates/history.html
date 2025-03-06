@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scan History | Plant Health Monitoring</title>
+    <title>Scan History | Medicinal Plant Monitoring</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
@@ -41,9 +41,8 @@
                             <td class="p-3">{{ scan.confidence_score|round(2) }}%</td>
                             <td class="p-3">{{ scan.timestamp }}</td>
                             <td class="p-3">
-                                <!-- Display the image if available -->
-                                {% if scan.image_filename %}
-                                    <img src="{{ url_for('static', filename='uploads/' + scan.image_filename) }}" alt="Uploaded Image" class="max-w-[100px] h-auto mx-auto rounded-md">
+                                {% if scan.image %}
+                                    <img src="../uploads/{{ scan.image }}" alt="Uploaded Image" class="max-w-[100px] h-auto mx-auto rounded-md">
                                 {% else %}
                                     <p>No Image</p>
                                 {% endif %}
