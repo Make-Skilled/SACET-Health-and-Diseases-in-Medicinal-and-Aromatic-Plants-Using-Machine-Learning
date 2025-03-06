@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Health Monitoring</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Add custom styles for animations and enhancements */
+        .hero-section {
+            background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);
+            animation: fadeIn 1s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-20px) translateX(20px); }
+        }
+
+        .feature-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.05);
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::after {
+            opacity: 0;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #388e3c 0%, #66bb6a 100%);
+            animation: fadeIn 1s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            animation-direction: reverse;
+        }
+
+        .cta-button {
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #4caf50;
+            transform: translateY(-3px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Hero Section -->
+    <section class="hero-section h-screen flex flex-col justify-center items-center text-center text-white px-6">
+        <h1 class="text-5xl font-bold mb-4">AI-Powered Plant Health Monitoring</h1>
+        <p class="text-lg mb-6 max-w-2xl">
+            Detect and classify plant diseases in real-time using advanced machine learning and image processing techniques.
+        </p>
+        <!-- <img src="plant_health.jpg" alt="Healthy Plant" class="w-2/3 md:w-1/2 rounded-lg shadow-lg mb-6"> -->
+        <a href="/login" class="cta-button bg-white text-green-700 font-semibold px-6 py-3 rounded-lg hover:bg-green-100 transition">
+            Get Started
+        </a>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 px-6">
+        <h2 class="text-4xl font-bold text-center text-green-700 mb-12">Why Choose Our System?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Feature 1 -->
+            <div class="feature-card bg-white p-6 rounded-lg shadow-lg text-center">
+                <!-- <img src="ai_analysis.jpg" alt="AI Analysis" class="w-20 h-20 mx-auto mb-4"> -->
+                <h3 class="text-xl font-semibold mb-2">AI-Powered Analysis</h3>
+                <p class="text-gray-600">Our deep learning models accurately detect plant diseases with high precision, helping farmers and gardeners maintain healthy crops and maximize yield.</p>
+            </div>
+            <!-- Feature 2 -->
+            <div class="feature-card bg-white p-6 rounded-lg shadow-lg text-center">
+                <!-- <img src="real_time.jpg" alt="Real-Time Processing" class="w-20 h-20 mx-auto mb-4"> -->
+                <h3 class="text-xl font-semibold mb-2">Real-Time Processing</h3>
+                <p class="text-gray-600">Identify diseases instantly, ensuring timely action and prevention. Our system provides immediate feedback, allowing for quick decision-making and response.</p>
+            </div>
+            <!-- Feature 3 -->
+            <div class="feature-card bg-white p-6 rounded-lg shadow-lg text-center">
+                <!-- <img src="user_friendly.jpg" alt="User-Friendly" class="w-20 h-20 mx-auto mb-4"> -->
+                <h3 class="text-xl font-semibold mb-2">User-Friendly Interface</h3>
+                <p class="text-gray-600">A simple and intuitive dashboard makes plant health monitoring easy, even for users with minimal technical knowledge. Navigate through features effortlessly and access detailed plant information.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section py-12 text-white text-center">
+        <h2 class="text-3xl font-bold mb-4">Start Monitoring Your Plants Today!</h2>
+        <p class="text-lg mb-6">Join our platform and safeguard your crops with intelligent disease detection. Experience the future of agriculture with our cutting-edge technology.</p>
+        <a href="/signup" class="cta-button bg-white text-green-700 font-semibold px-6 py-3 rounded-lg hover:bg-green-100 transition">
+            Sign Up Now
+        </a>
+    </section>
+</body>
+</html>

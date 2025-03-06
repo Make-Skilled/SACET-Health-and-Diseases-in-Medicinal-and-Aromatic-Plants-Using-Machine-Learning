@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Health Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Toggle description visibility
+        function toggleDescription(id) {
+            let element = document.getElementById(id);
+            element.classList.toggle('hidden');
+            element.classList.toggle('opacity-0');  // Fade effect
+            element.classList.toggle('opacity-100');
+            element.classList.toggle('transition-all');
+            element.classList.toggle('duration-500');
+        }
+
+        // Fade-in page on load
+        document.addEventListener("DOMContentLoaded", function () {
+            document.body.classList.add('opacity-0');
+            setTimeout(() => {
+                document.body.classList.remove('opacity-0');
+                document.body.classList.add('opacity-100');
+                document.body.classList.add('transition-all', 'duration-700');
+            }, 100);
+        });
+    </script>
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 shadow-md fixed w-full top-0 z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-white text-2xl font-bold">Plant Health Dashboard</h1>
+            <div>
+                <a href="/history" class="text-white px-4 py-2 rounded-lg bg-white-500 hover:bg-white hover:text-red-400 transition duration-300">History</a>
+                <a href="/logout" class="text-white px-4 py-2 rounded-lg bg-red-500 hover:bg-red-400 transition duration-300">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <section class="pt-20 px-6">
+        <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg animate-fade-in">
+
+            <!-- Image Upload Form -->
+            <form action="{{ url_for('dashboard') }}" method="POST" enctype="multipart/form-data">
+                <div class="mb-6">
+                    <label for="file" class="block text-lg font-semibold text-gray-800">Upload an Image for Prediction</label>
+                    <input type="file" name="file" id="file" class="mt-2 p-2 border border-gray-300 rounded-lg w-full" accept="image/*" required>
+                </div>
+                <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg text-lg font-semibold shadow-md hover:bg-blue-500 hover:scale-105 transition duration-300">Submit Image</button>
+            </form>
+
+            <!-- Display Prediction Results -->
+            {% if result %}
+                <div class="mt-8">
+                    <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">{{ result.class }}</h2>
+
+                    <!-- Confidence Score -->
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3">
+                        Confidence Score: 
+                        {% if result.confidence_score is not none %}
+                            {{ result.confidence_score | round(2) }}%
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </h3>
+
+                    <!-- Plant Info Section -->
+                    <div class="mt-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Plant Information</h3>
+
+                        <h4 class="text-lg font-semibold text-blue-600">Scientific Name:</h4>
+                        <p class="text-gray-700">{{ result.plant_info.get('scientific_name', 'N/A') }}</p>
+
+                        <h4 class="text-lg font-semibold text-blue-600 mt-3">Family:</h4>
+                        <p class="text-gray-700">{{ result.plant_info.get('family', 'N/A') }}</p>
+
+                        <h4 class="text-lg font-semibold text-blue-600 mt-3">Description:</h4>
+                        <p class="text-gray-700">{{ result.plant_info.get('description', 'N/A') }}</p>
+
+                        <!-- Benefits -->
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold text-green-600 mb-3">🌿 Benefits:</h3>
+                            <ul class="list-disc pl-6 space-y-2">
+                                {% for benefit in result.plant_info.get('benefits', []) %}
+                                    <li class="text-gray-700">{{ benefit }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Medicinal Uses -->
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold text-teal-600 mb-3">🩺 Medicinal Uses:</h3>
+                            <ul class="list-disc pl-6 space-y-2">
+                                {% for use in result.plant_info.get('medicinal_uses', []) %}
+                                    <li class="text-gray-700">{{ use }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Diseases Treated -->
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold text-purple-600 mb-3">🔹 Diseases Treated:</h3>
+                            <ul class="list-disc pl-6 space-y-2">
+                                {% for disease in result.plant_info.get('diseases_treated', []) %}
+                                    <li class="text-gray-700">{{ disease }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Preparation Methods -->
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold text-orange-600 mb-3">🍃 Preparation Methods:</h3>
+                            <ul class="list-disc pl-6 space-y-2">
+                                {% for method in result.plant_info.get('preparation_methods', []) %}
+                                    <li class="text-gray-700">{{ method }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Side Effects -->
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold text-red-600 mb-3">⚠️ Side Effects:</h3>
+                            <ul class="list-disc pl-6 space-y-2">
+                                {% for side_effect in result.plant_info.get('side_effects', []) %}
+                                    <li class="text-gray-700">{{ side_effect }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <!-- Back Button -->
+                    <div class="text-center mt-6">
+                        <a href="/dashboard" class="px-6 py-3 bg-blue-600 text-white rounded-lg text-lg font-semibold shadow-md hover:bg-blue-500 hover:scale-105 transition duration-300">Back to Dashboard</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-600 text-white text-center p-4 mt-12">
+        &copy; 2025 Plant Health Monitoring. All Rights Reserved.
+    </footer>
+
+</body>
+
+</html>
